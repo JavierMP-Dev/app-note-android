@@ -3,11 +3,14 @@ package com.plcoding.cleanarchitecturenoteapp.di
 import android.app.Application
 import androidx.room.Room
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.data_source.NoteDataBase
+import com.plcoding.cleanarchitecturenoteapp.feature_note.data.repository.NoteRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import com.plcoding.cleanarchitecturenoteapp.domain.repository.NoteRepository
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,5 +24,11 @@ object AppModule {
             NoteDataBase::class.java,
             NoteDataBase.DATABASE_NAME
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteRepository(db:NoteDataBase): NoteRepository{
+            return NoteRepositoryImpl(db.noteDao)
     }
 }
