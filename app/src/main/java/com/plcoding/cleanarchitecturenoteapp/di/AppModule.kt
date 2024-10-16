@@ -4,12 +4,17 @@ import android.app.Application
 import androidx.room.Room
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.data_source.NoteDataBase
 import com.plcoding.cleanarchitecturenoteapp.feature_note.data.repository.NoteRepositoryImpl
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
 import com.plcoding.cleanarchitecturenoteapp.domain.repository.NoteRepository
+import com.plcoding.cleanarchitecturenoteapp.domain.use_case.DeleteNote
+
+import com.plcoding.cleanarchitecturenoteapp.domain.use_case.NoteCaseUses
 
 
 @Module
@@ -30,5 +35,14 @@ object AppModule {
     @Singleton
     fun provideNoteRepository(db:NoteDataBase): NoteRepository{
             return NoteRepositoryImpl(db.noteDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteUseCases(repository: NoteRepository): NoteCaseUses{
+        return NoteCaseUses(
+            getNotes = (repository),
+            deleteNote = DeleteNote(repository)
+        )
     }
 }
