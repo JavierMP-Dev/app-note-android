@@ -4,5 +4,6 @@ import com.plcoding.cleanarchitecturenoteapp.domain.repository.NoteRepository
 
 data class NoteCaseUses(
     val getNotes: NoteRepository,
-    val deleteNote: DeleteNote
+    val deleteNote: DeleteNote,
+    val addNote: AddNote
 )

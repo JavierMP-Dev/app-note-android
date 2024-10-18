@@ -12,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 import com.plcoding.cleanarchitecturenoteapp.domain.repository.NoteRepository
+import com.plcoding.cleanarchitecturenoteapp.domain.use_case.AddNote
 import com.plcoding.cleanarchitecturenoteapp.domain.use_case.DeleteNote
 
 import com.plcoding.cleanarchitecturenoteapp.domain.use_case.NoteCaseUses
@@ -42,7 +43,8 @@ object AppModule {
     fun provideNoteUseCases(repository: NoteRepository): NoteCaseUses{
         return NoteCaseUses(
             getNotes = (repository),
-            deleteNote = DeleteNote(repository)
+            deleteNote = DeleteNote(repository),
+            addNote = AddNote(repository)
         )
     }
 }
