@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.plcoding.cleanarchitecturenoteapp.domain.use_case.DeleteNote
-import com.plcoding.cleanarchitecturenoteapp.domain.use_case.NoteCaseUses
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,13 +16,14 @@ import com.plcoding.cleanarchitecturenoteapp.domain.util.NoteOrder
 
 import kotlinx.coroutines.Job
 import com.plcoding.cleanarchitecturenoteapp.domain.util.OrderType
+import com.plcoding.cleanarchitecturenoteapp.feature_note.domain.use_case.NoteUseCases
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.launchIn
 
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-    private val noteCaseUses: NoteCaseUses
+    private val noteUseCases: NoteUseCases
 ) : ViewModel(){
 
     private val  _state = mutableStateOf(NotesState())
@@ -48,13 +49,13 @@ class NotesViewModel @Inject constructor(
             }
             is NotesEvent.DeleteNote->{
                 viewModelScope.launch{
-                    noteCaseUses.deleteNote(event.note)
+                    noteUseCases.deleteNote(event.note)
                     recentlyDeletedNote = event.note
                 }
              }
             is NotesEvent.RestoreNote ->{
                 viewModelScope.launch {
-                noteCaseUses.addNote(recentlyDeletedNote ?: return@launch)
+                    noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
                     recentlyDeletedNote = null
                 }
             }
@@ -68,8 +69,8 @@ class NotesViewModel @Inject constructor(
 
         private fun getNotes(noteOrder: NoteOrder){
             getNotesJob?.cancel()
-            getNotesJob =  noteCaseUses.getNotes(noteOrder)
-                .onEach { notes: List<Note> ->
+            getNotesJob = noteUseCases.getNotes(noteOrder)
+                .onEach { notes ->
                     _state.value = state.value.copy(
                         notes = notes,
                         noteOrder = noteOrder
