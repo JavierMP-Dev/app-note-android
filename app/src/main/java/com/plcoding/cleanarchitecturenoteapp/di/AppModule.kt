@@ -14,8 +14,10 @@ import javax.inject.Singleton
 import com.plcoding.cleanarchitecturenoteapp.domain.repository.NoteRepository
 import com.plcoding.cleanarchitecturenoteapp.domain.use_case.AddNote
 import com.plcoding.cleanarchitecturenoteapp.domain.use_case.DeleteNote
+import com.plcoding.cleanarchitecturenoteapp.domain.use_case.GetNotes
 
-import com.plcoding.cleanarchitecturenoteapp.domain.use_case.NoteCaseUses
+
+import com.plcoding.cleanarchitecturenoteapp.feature_note.domain.use_case.NoteUseCases
 
 
 @Module
@@ -40,9 +42,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteUseCases(repository: NoteRepository): NoteCaseUses{
-        return NoteCaseUses(
-            getNotes = (repository),
+    fun provideNoteUseCases(repository: NoteRepository): NoteUseCases{
+        return NoteUseCases(
+            getNotes = GetNotes(repository),
             deleteNote = DeleteNote(repository),
             addNote = AddNote(repository)
         )
